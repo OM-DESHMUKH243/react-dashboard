@@ -1,7 +1,13 @@
 import { useState } from "react";
 import Navbar from "./components/Navbar";
 import Dashboard from "./components/Dashboard";
-import { Connection, PublicKey, clusterApiUrl, Transaction, SystemProgram } from "@solana/web3.js";
+import {
+  Connection,
+  PublicKey,
+  clusterApiUrl,
+  Transaction,
+  SystemProgram,
+} from "@solana/web3.js";
 
 function App() {
   const [btc, setBtc] = useState("-");
@@ -32,7 +38,7 @@ function App() {
     setLoading(false);
   }
 
-  // ================= CONNECT WALLET + BALANCE =================
+  // ================= CONNECT WALLET =================
   async function connectWallet() {
     try {
       const { solana } = window;
@@ -56,7 +62,7 @@ function App() {
     }
   }
 
-  // ================= SEND SOL FUNCTION =================
+  // ================= SEND SOL =================
   async function sendSol() {
     try {
       const { solana } = window;
@@ -68,7 +74,6 @@ function App() {
 
       const connection = new Connection(clusterApiUrl("devnet"));
       const fromPubkey = solana.publicKey;
-
       const toPubkey = new PublicKey(fromPubkey.toString());
 
       const transaction = new Transaction().add(
@@ -84,9 +89,9 @@ function App() {
       transaction.recentBlockhash = blockhashObj.blockhash;
 
       const signed = await solana.signTransaction(transaction);
-      const signature = await connection.sendRawTransaction(signed.serialize());
+      await connection.sendRawTransaction(signed.serialize());
 
-      alert("Transaction sent 🚀\nSignature: " + signature);
+      alert("✅ Transaction Successful!");
     } catch (err) {
       console.log(err);
       alert("Transaction failed");
